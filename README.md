@@ -1,1 +1,83 @@
-# DistgDisp
+## DistgDisp: Disentangling Mechanism for Light Field Disparity Estimation
+<br>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/DistgDisp.png" width="95%"> </p>
+
+This is the PyTorch implementation of the disparity estimation method in our paper "Disentangling Light Fields for Super-Resolution and Disparity Estimation". Please refer to our [paper](https://yingqianwang.github.io/) and [project page](https://yingqianwang.github.io/DistgLF) for details.<br>
+
+## Preparation:
+### Requirement:
+* PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.6, cuda=9.0.
+
+### Datasets:
+* We used the HCI 4D LF benchmark for training and evaluation. Please refer to the [benchmark website](https://lightfield-analysis.uni-konstanz.de) for details.
+
+### Path structure:
+  ```
+  ├──./datasets/
+  │    ├── training
+  │    │    ├── antinous
+  │    │    │    ├── gt_disp_lowres.pfm
+  │    │    │    ├── valid_mask.png
+  │    │    │    ├── input_Cam000.png
+  │    │    │    ├── input_Cam001.png
+  │    │    │    ├── ...
+  │    │    ├── boardgames
+  │    │    ├── ...
+  │    ├── validation
+  │    │    ├── backgammon
+  │    │    │    ├── gt_disp_lowres.pfm
+  │    │    │    ├── input_Cam000.png
+  │    │    │    ├── input_Cam001.png  
+  │    │    │    ├── ...
+  │    │    ├── boxes
+  │    |    ├── ...
+  │    ├── test
+  │    │    ├── bedroom
+  │    │    │    ├── input_Cam000.png
+  │    │    │    ├── input_Cam001.png  
+  │    │    │    ├── ...
+  │    │    ├── bicycle
+  │    |    ├── herbs
+  │    |    ├── origami
+  ```
+
+## Train:
+* Set the hyper-parameters in `parse_args()` if needed. We have provided our default settings in the realeased codes.
+* Run `train.py` to perform network training.
+* Checkpoint will be saved to `./log/`.
+
+## Test:
+* Place the input LFs into `./input` (see the attached examples).
+* Run `test.py` to perform inference on each test scene.
+* The result files (i.e., `scene_name.pfm`) will be saved to `./Results/`.
+
+
+## Results:
+
+### Quantitative Results:
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/QuantitativeDisp.png" width="100%"> </p>
+
+### Visual Comparisons:
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/Visual-Disp.png" width="100%"> </p>
+
+### Screenshot on the HCI 4D LF Benchmark:
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/screenshot.png" width="100%"> </p>
+
+### Performance on real LFs and extended application:
+<p align="center"> <a href="https://wyqdatabase.s3.us-west-1.amazonaws.com/DistgLF-SpatialSR.mp4"><img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/Application.png" width="100%"></a> </p>
+
+
+## Citiation
+**If you find this work helpful, please consider citing:**
+```
+@Article{DistgLF,
+    author    = {Wang, Yingqian and Wang, Longguang and Wu, Gaochang and Yang, Jungang and An, Wei and Yu, Jingyi and Guo, Yulan},
+    title     = {Disentangling Light Fields for Super-Resolution and Disparity Estimation},
+    journal   = {IEEE TPAMI (under review)}, 
+    year      = {2022},   
+}
+```
+<br>
+
+## Contact
+**Welcome to raise issues or email to [wangyingqian16@nudt.edu.cn](wangyingqian16@nudt.edu.cn) for any question regarding this work.**
