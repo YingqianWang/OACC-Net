@@ -1,6 +1,6 @@
 ## DistgDisp: Disentangling Mechanism for Light Field Disparity Estimation
 <br>
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/DistgDisp.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DistgDisp.png" width="95%"> </p>
 
 This is the PyTorch implementation of the disparity estimation method in our paper "Disentangling Light Fields for Super-Resolution and Disparity Estimation". Please refer to our [paper](https://yingqianwang.github.io/) and [project page](https://yingqianwang.github.io/DistgLF) for details.<br>
 
@@ -55,16 +55,16 @@ This is the PyTorch implementation of the disparity estimation method in our pap
 ## Results:
 
 ### Quantitative Results:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/QuantitativeDisp.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/QuantitativeDisp.png" width="100%"> </p>
 
 ### Visual Comparisons:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/Visual-Disp.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/Visual-Disp.png" width="100%"> </p>
 
 ### Screenshot on the HCI 4D LF Benchmark:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/screenshot.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/screenshot.png" width="100%"> </p>
 
 ### Performance on real LFs and extended application:
-<p align="center"> <a href="https://wyqdatabase.s3.us-west-1.amazonaws.com/DistgLF-SpatialSR.mp4"><img src="https://raw.github.com/YingqianWang/DistgSSR/master/Figs/Application.png" width="100%"></a> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDistgDisp/master/Figs/DispApplication.png" width="100%"> </p>
 
 
 ## Citiation
