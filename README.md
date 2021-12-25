@@ -55,16 +55,16 @@ This is the PyTorch implementation of the disparity estimation method in our pap
 ## Results:
 
 ### Quantitative Results:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/QuantitativeDisp.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/QuantitativeDisp.png" width="95%"> </p>
 
 ### Visual Comparisons:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/Visual-Disp.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/Visual-Disp.png" width="95%"> </p>
 
 ### Screenshot on the HCI 4D LF Benchmark (July 2020):
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/screenshot.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/screenshot.png" width="95%"> </p>
 
 ### Performance on real LFs and extended applications:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DispApplication.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DispApplication.png" width="95%"> </p>
 
 
 ## Citiation
