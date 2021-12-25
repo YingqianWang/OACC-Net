@@ -64,7 +64,7 @@ This is the PyTorch implementation of the disparity estimation method in our pap
 <p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/screenshot.png" width="100%"> </p>
 
 ### Performance on real LFs and extended application:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDistgDisp/master/Figs/DispApplication.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDistg/master/Figs/DispApplication.png" width="100%"> </p>
 
 
 ## Citiation
