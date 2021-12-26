@@ -46,8 +46,8 @@ This is the PyTorch implementation of the disparity estimation method in our pap
 * Run `train.py` to perform network training.
 * Checkpoint will be saved to `./log/`.
 
-## Test:
-* Place the input LFs into `./input` (see the attached examples).
+## Test on your own LFs:
+* Place the input LFs into `./demo_input` (see the attached examples).
 * Run `test.py` to perform inference on each test scene.
 * The result files (i.e., `scene_name.pfm`) will be saved to `./Results/`.
 
