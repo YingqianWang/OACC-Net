@@ -7,7 +7,7 @@
 ## Preparation:
 ### Requirement:
 * PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.6, cuda=9.0.
-* Av AMD3900X CPU and an RTX 3090 GPU are required to reproduce the inference time reported in our paper.
+* An AMD3900X CPU and an RTX 3090 GPU are required to reproduce the inference time reported in our paper.
 
 ### Datasets:
 * We used the HCI 4D LF benchmark for training and evaluation. Please refer to the [benchmark website](https://lightfield-analysis.uni-konstanz.de) for details.
