@@ -7,6 +7,7 @@
 ## Preparation:
 ### Requirement:
 * PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.6, cuda=9.0.
+* Av AMD3900X CPU and an RTX 3090 GPU are required to reproduce the inference time reported in our paper.
 
 ### Datasets:
 * We used the HCI 4D LF benchmark for training and evaluation. Please refer to the [benchmark website](https://lightfield-analysis.uni-konstanz.de) for details.
@@ -50,6 +51,10 @@
 * Place the input LFs into `./demo_input` (see the attached examples).
 * Run `test.py` to perform inference on each test scene.
 * The result files (i.e., `scene_name.pfm`) will be saved to `./Results/`.
+
+## Reproduce the scores on the HCI 4D LF benchmark:
+* Perform inference on each validation scenes separately.
+* Use the [official evaluation toolkit](https://github.com/lightfield-analysis/evaluation-toolkit) to obtain quantitative results.
 
 
 ## Results:
