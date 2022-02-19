@@ -1,7 +1,7 @@
-import torch
-import time
-import argparse
 from utils import *
+from einops import rearrange
+import argparse
+from torchvision.transforms import ToTensor
 from model import Net
 
 
@@ -13,7 +13,8 @@ def parse_args():
     parser.add_argument('--model_name', type=str, default='DistgDisp')
     parser.add_argument('--testset_dir', type=str, default='./demo_input/')
     parser.add_argument('--crop', type=bool, default=True)
-    parser.add_argument('--patchsize', type=int, default=128)
+    parser.add_argument('--patchsize', type=int, default=64)
+    parser.add_argument('--minibatch_test', type=int, default=32)
     parser.add_argument('--model_path', type=str, default='./log/DistgDisp.pth.tar')
     parser.add_argument('--save_path', type=str, default='./Results/')
     return parser.parse_args()
@@ -44,9 +45,9 @@ def test(cfg):
         lf_gray = np.mean((1 / 255) * lf.astype('float32'), axis=-1, keepdims=False)
         angBegin = (9 - angRes) // 2
         lf_angCrop = lf_gray[angBegin:  angBegin + angRes, angBegin: angBegin + angRes, :, :]
-        data = rearrange(lf_angCrop, 'u v h w -> (u h) (v w)')
 
         if cfg.crop == False:
+            data = rearrange(lf_angCrop, 'u v h w -> (u h) (v w)')
             data = ToTensor()(data.copy())
             data = data.unsqueeze(0)
             with torch.no_grad():
@@ -56,22 +57,29 @@ def test(cfg):
         else:
             patchsize = cfg.patchsize
             stride = patchsize // 2
-            subLFin = LFdivide(data, cfg.angRes, patchsize, stride)  # numU, numV, h*angRes, w*angRes
-            numU, numV, H, W = subLFin.shape
-            subLFout = np.zeros(shape=(numU, numV, patchsize, patchsize), dtype='float32')
-            for u in range(numU):
-                for v in range(numV):
-                    sub_data = subLFin[u, v, :, :]
-                    sub_data = ToTensor()(sub_data.copy())
-                    with torch.no_grad():
-                        sub_out = net(sub_data.unsqueeze(0).to(cfg.device))
-                        subLFout[u, v, :, :] = sub_out.squeeze().cpu().numpy()
-            bdr = (patchsize - stride) // 2
-            disp = np.zeros(shape=(numU * stride, numV * stride), dtype='float32')
+            data = torch.from_numpy(lf_angCrop)
+            sub_lfs = LFdivide(data.unsqueeze(2), patchsize, stride)
+            n1, n2, u, v, c, h, w = sub_lfs.shape
+            sub_lfs = rearrange(sub_lfs, 'n1 n2 u v c h w -> (n1 n2) u v c h w')
+            mini_batch = cfg.minibatch_test
+            num_inference = (n1 * n2) // mini_batch
+            with torch.no_grad():
+                out_disp = []
+                for idx_inference in range(num_inference):
+                    current_lfs = sub_lfs[idx_inference * mini_batch: (idx_inference + 1) * mini_batch, :, :, :, :, :]
+                    input_data = rearrange(current_lfs, 'b u v c h w -> b c (u h) (v w)')
+                    out_disp.append(net(input_data.to(cfg.device)))
 
-            for ku in range(numU):
-                for kv in range(numV):
-                    disp[ku * stride:(ku + 1) * stride, kv * stride:(kv + 1) * stride] = subLFout[ku, kv, bdr:-bdr, bdr:-bdr]
+                if (n1 * n2) % mini_batch:
+                    current_lfs = sub_lfs[(idx_inference + 1) * mini_batch:, :, :, :, :, :]
+                    input_data = rearrange(current_lfs, 'b u v c h w -> b c (u h) (v w)')
+                    out_disp.append(net(input_data.to(cfg.device)))
+
+            out_disps = torch.cat(out_disp, dim=0)
+            out_disps = rearrange(out_disps, '(n1 n2) c h w -> n1 n2 c h w', n1=n1, n2=n2)
+            disp = LFintegrate(out_disps, patchsize, patchsize // 2)
+            disp = disp[0: data.shape[2], 0: data.shape[3]]
+            disp = np.float32(disp.data.cpu())
 
         print('Finished! \n')
         write_pfm(disp, cfg.save_path + '%s.pfm' % (scenes))
@@ -79,61 +87,6 @@ def test(cfg):
     return
 
 
-def LFdivide(data, angRes, pz, stride):
-    uh, vw = data.shape
-    h0 = uh //angRes
-    w0 = vw //angRes
-    bdr = (pz - stride) // 2
-    h = h0 + 2 * bdr
-    w = w0 + 2 * bdr
-    if (h - pz) % stride:
-        numU = (h - pz)//stride + 2
-    else:
-        numU = (h - pz)//stride + 1
-    if (w - pz) % stride:
-        numV = (w - pz)//stride + 2
-    else:
-        numV = (w - pz)//stride + 1
-    hE = stride * (numU-1) + pz
-    wE = stride * (numV-1) + pz
-
-    dataE = np.zeros(shape=(hE*angRes, wE*angRes), dtype='float32')
-    for u in range(angRes):
-        for v in range(angRes):
-            Im = data[u*h0:(u+1)*h0, v*w0:(v+1)*w0]
-            dataE[u*hE : u*hE+h, v*wE : v*wE+w] = ImageExtend(Im, bdr)
-    subLF = np.zeros(shape=(numU, numV, pz*angRes, pz*angRes), dtype='float32')
-    for kh in range(numU):
-        for kw in range(numV):
-            for u in range(angRes):
-                for v in range(angRes):
-                    uu = u*hE + kh*stride
-                    vv = v*wE + kw*stride
-                    subLF[kh, kw, u*pz:(u+1)*pz, v*pz:(v+1)*pz] = dataE[uu:uu+pz, vv:vv+pz]
-    return subLF
-
-
-def ImageExtend(Im, bdr):
-    h, w = Im.shape
-    Im_lr = Im[:, ::-1]
-    Im_ud = Im[::-1, :]
-    Im_diag = Im[::-1, ::-1]
-    Im_up = np.concatenate((Im_diag, Im_ud, Im_diag), 1)
-    Im_mid = np.concatenate((Im_lr, Im, Im_lr), 1)
-    Im_down = np.concatenate((Im_diag, Im_ud, Im_diag), 1)
-    Im_Ext = np.concatenate((Im_up, Im_mid, Im_down), 0)
-    Im_out = Im_Ext[h-bdr : 2*h+bdr, w-bdr : 2*w+bdr]
-
-    return Im_out
-
-
-def LF2SAI(x):
-    u, v, h, w = x.shape
-    out = np.zeros((u * h, v * w), dtype=np.float32)
-    for i in range(u):
-        for j in range(v):
-            out[i*h : (i+1)*h, j*w : (j+1)*w] = x[i, j, :, :]
-    return out
 
 
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
 #from PIL import Image
 import os
+import torch
+import torch.nn.functional as F
 from torch.utils.data.dataset import Dataset
 from torchvision.transforms import ToTensor
 import random
@@ -200,3 +202,42 @@ def random_crop(lf, dispGT, patchsize, refocus_flag):
     out_disp = dispGT[h_idx : h_idx + patchsize, w_idx : w_idx + patchsize, :]
 
     return out_lf, out_disp
+
+
+
+def ImageExtend(Im, bdr):
+    [_, _, h, w] = Im.size()
+    Im_lr = torch.flip(Im, dims=[-1])
+    Im_ud = torch.flip(Im, dims=[-2])
+    Im_diag = torch.flip(Im, dims=[-1, -2])
+
+    Im_up = torch.cat((Im_diag, Im_ud, Im_diag), dim=-1)
+    Im_mid = torch.cat((Im_lr, Im, Im_lr), dim=-1)
+    Im_down = torch.cat((Im_diag, Im_ud, Im_diag), dim=-1)
+    Im_Ext = torch.cat((Im_up, Im_mid, Im_down), dim=-2)
+    Im_out = Im_Ext[:, :, h - bdr[0]: 2 * h + bdr[1], w - bdr[2]: 2 * w + bdr[3]]
+
+    return Im_out
+
+
+def LFdivide(lf, patch_size, stride):
+    U, V, C, H, W = lf.shape
+    data = rearrange(lf, 'u v c h w -> (u v) c h w')
+
+    bdr = (patch_size - stride) // 2
+    numU = (H + bdr * 2 - 1) // stride
+    numV = (W + bdr * 2 - 1) // stride
+    data_pad = ImageExtend(data, [bdr, bdr + stride - 1, bdr, bdr + stride - 1])
+    subLF = F.unfold(data_pad, kernel_size=patch_size, stride=stride)
+    subLF = rearrange(subLF, '(u v) (c h w) (n1 n2) -> n1 n2 u v c h w',
+                      n1=numU, n2=numV, u=U, v=V, h=patch_size, w=patch_size)
+
+    return subLF
+
+
+def LFintegrate(subLFs, patch_size, stride):
+    bdr = (patch_size - stride) // 2
+    out = subLFs[:, :, :, bdr:bdr+stride, bdr:bdr+stride]
+    out = rearrange(out, 'n1 n2 c h w -> (n1 h) (n2 w) c')
+
+    return out.squeeze()

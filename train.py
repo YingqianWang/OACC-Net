@@ -1,4 +1,3 @@
-import torch
 import time
 import argparse
 from torch.autograd import Variable
@@ -7,7 +6,7 @@ import torch.backends.cudnn as cudnn
 from utils import *
 from tqdm import tqdm
 from model import Net
-from test import LFdivide
+
 
 # Settings
 def parse_args():
@@ -26,7 +25,6 @@ def parse_args():
     parser.add_argument('--n_steps', type=int, default=15000, help='number of epochs to update learning rate')
     parser.add_argument('--gamma', type=float, default=0.5, help='learning rate decaying factor')
     parser.add_argument('--load_pretrain', type=bool, default=False)
-    parser.add_argument('--load_epoch', type=bool, default=False)
     parser.add_argument('--model_path', type=str, default='./log/DistgDisp.pth.tar')
 
     return parser.parse_args()
@@ -43,8 +41,7 @@ def train(cfg):
         if os.path.isfile(cfg.model_path):
             model = torch.load(cfg.model_path, map_location={'cuda:0': cfg.device})
             net.load_state_dict(model['state_dict'], strict=False)
-            if cfg.load_epoch:
-                epoch_state = model["epoch"]
+            epoch_state = model["epoch"]
         else:
             print("=> no model found at '{}'".format(cfg.load_model))
 
@@ -83,7 +80,8 @@ def train(cfg):
                     'epoch': idx_epoch + 1,
                     'state_dict': net.state_dict(),
                 }, save_path='./log/', filename=cfg.model_name + '.pth.tar')
-        if idx_epoch % 10 == 9:
+
+        if idx_epoch % 100 == 99:
             if cfg.parallel:
                 save_ckpt({
                     'epoch': idx_epoch + 1,
@@ -102,7 +100,6 @@ def train(cfg):
 
 def valid(net, cfg, epoch):
 
-    torch.no_grad()
     scene_list = ['boxes', 'cotton', 'dino', 'sideboard']
     angRes = cfg.angRes
 
@@ -122,26 +119,34 @@ def valid(net, cfg, epoch):
         angBegin = (9 - angRes) // 2
 
         lf_angCrop = lf[angBegin:  angBegin + angRes, angBegin: angBegin + angRes, :, :]
-        data = rearrange(lf_angCrop, 'u v h w -> (u h) (v w)')
+        data = torch.from_numpy(lf_angCrop)
 
         patchsize = 128
-        stride = patchsize // 2
-        subLFin = LFdivide(data, cfg.angRes, patchsize, stride)
-        numU, numV, H, W = subLFin.shape
-        subLFout = np.zeros(shape=(numU, numV, patchsize, patchsize), dtype='float32')
-        for u in range(numU):
-            for v in range(numV):
-                sub_data = subLFin[u, v, :, :]
-                sub_data = ToTensor()(sub_data.copy())
-                sub_data = sub_data.unsqueeze(0)
-                with torch.no_grad():
-                    sub_out, _ = net(sub_data.to(cfg.device))
-                    subLFout[u, v, :, :] = sub_out.squeeze().cpu().numpy()
-        bdr = (patchsize - stride) // 2
-        disp = np.zeros(shape=(numU * stride, numV * stride), dtype='float32')
-        for ku in range(numU):
-            for kv in range(numV):
-                disp[ku * stride:(ku + 1) * stride, kv * stride:(kv + 1) * stride] = subLFout[ku, kv, bdr:-bdr, bdr:-bdr]
+        stride = 64
+        mini_batch = 8
+
+        sub_lfs = LFdivide(data.unsqueeze(2), patchsize, stride)
+        n1, n2, u, v, c, h, w = sub_lfs.shape
+        sub_lfs = rearrange(sub_lfs, 'n1 n2 u v c h w -> (n1 n2) u v c h w')
+
+        num_inference = (n1 * n2) // mini_batch
+        with torch.no_grad():
+            out_disp = []
+            for idx_inference in range(num_inference):
+                current_lfs = sub_lfs[idx_inference * mini_batch: (idx_inference + 1) * mini_batch, :, :, :, :, :]
+                input_data = rearrange(current_lfs, 'b u v c h w -> b c (u h) (v w)')
+                out_disp.append(net(input_data.to(cfg.device)))
+
+            if (n1 * n2) % mini_batch:
+                current_lfs = sub_lfs[(idx_inference + 1) * mini_batch:, :, :, :, :, :]
+                input_data = rearrange(current_lfs, 'b u v c h w -> b c (u h) (v w)')
+                out_disp.append(net(input_data.to(cfg.device)))
+
+        out_disps = torch.cat(out_disp, dim=0)
+        out_disps = rearrange(out_disps, '(n1 n2) c h w -> n1 n2 c h w', n1=n1, n2=n2)
+        disp = LFintegrate(out_disps, patchsize, patchsize // 2)
+        disp = disp[0: data.shape[2], 0: data.shape[3]]
+        disp = np.float32(disp.data.cpu())
 
         mse100 = np.mean((disp[11:-11, 11:-11] - disp_gt[11:-11, 11:-11]) ** 2) * 100
         txtfile = open(cfg.model_name + '_MSE100.txt', 'a')
