@@ -53,8 +53,8 @@
 * The result files (i.e., `scene_name.pfm`) will be saved to `./Results/`.
 
 ## Reproduce the scores on the HCI 4D LF benchmark:
-* Perform inference on each scene separately following the aforementioned instructions.
-* Use the [official evaluation toolkit](https://github.com/lightfield-analysis/evaluation-toolkit) to obtain quantitative results.
+* Perform inference on each scene separately to generate `.pfm` result files.
+* Download groundtruth disparity images (i.e., `gt_disp_lowres.pfm`) and use the [official evaluation toolkit](https://github.com/lightfield-analysis/evaluation-toolkit) to obtain quantitative results.
 
 
 ## Results:
