@@ -2,7 +2,7 @@
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DistgDisp.png" width="90%"> </p>
 
-This is the PyTorch implementation of the disparity estimation method in our paper "Disentangling Light Fields for Super-Resolution and Disparity Estimation". Please refer to our [paper](https://yingqianwang.github.io/) and [project page](https://yingqianwang.github.io/DistgLF) for details.<br>
+***This is the PyTorch implementation of the disparity estimation method in our paper "Disentangling Light Fields for Super-Resolution and Disparity Estimation". Please refer to our [paper](https://yingqianwang.github.io/) and [project page](https://yingqianwang.github.io/DistgLF) for details.***<br>
 
 ## Preparation:
 ### Requirement:
@@ -73,7 +73,7 @@ This is the PyTorch implementation of the disparity estimation method in our pap
 @Article{DistgLF,
     author    = {Wang, Yingqian and Wang, Longguang and Wu, Gaochang and Yang, Jungang and An, Wei and Yu, Jingyi and Guo, Yulan},
     title     = {Disentangling Light Fields for Super-Resolution and Disparity Estimation},
-    journal   = {IEEE TPAMI}, 
+    journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 
     year      = {2022},   
 }
 ```
