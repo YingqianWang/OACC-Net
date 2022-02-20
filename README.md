@@ -7,7 +7,7 @@
 ## Preparation:
 ### Requirement:
 * PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.6, cuda=9.0.
-* An AMD3900X CPU and an RTX 3090 GPU are required to reproduce the inference time reported in our paper.
+* A single GPU with cuda memory larger than 12 GB is required to reproduce the inference time reported in our paper.
 
 ### Datasets:
 * We used the HCI 4D LF benchmark for training and evaluation. Please refer to the [benchmark website](https://lightfield-analysis.uni-konstanz.de) for details.
@@ -56,6 +56,8 @@
 * Perform inference on each scene separately to generate `.pfm` result files.
 * Download groundtruth disparity images (i.e., `gt_disp_lowres.pfm`) and use the [official evaluation toolkit](https://github.com/lightfield-analysis/evaluation-toolkit) to obtain quantitative results.
 
+## Reproduce the inference time reported in our paper:
+* Run `test_inference_time.py` to reproduce the inference time reported in our paper. Note that, the inference need to be performed on a GPU with a cuda memory larger than 12 GB.
 
 ## Results:
 
