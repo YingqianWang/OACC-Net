@@ -1,8 +1,8 @@
-## DistgDisp: Disentangling Mechanism for Light Field Disparity Estimation
+## OACC-Net: Occlusion-Aware Cost Constructor Network
 <br>
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DistgDisp.png" width="90%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
-***This is the PyTorch implementation of the disparity estimation method in our paper "Disentangling Light Fields for Super-Resolution and Disparity Estimation". Please refer to our [paper](https://yingqianwang.github.io/) and [project page](https://yingqianwang.github.io/DistgLF) for details.***<br>
+***PyTorch implementation of our CVPR 2022 paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf]()]***<br>
 
 ## Preparation:
 ### Requirement:
@@ -62,26 +62,26 @@
 ## Results:
 
 ### Quantitative Results:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/QuantitativeDisp.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Quantitative.png" width="95%"> </p>
 
 ### Visual Comparisons:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/Visual-Disp.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Visual.png" width="95%"> </p>
 
-### Screenshot on the HCI 4D LF Benchmark (July 2020):
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/screenshot.png" width="95%"> </p>
+### Screenshot on the HCI 4D LF Benchmark (March 2022):
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/screenshot.png" width="95%"> </p>
 
 ### Performance on real LFs and extended applications:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/DistgDisp/master/Figs/DispApplication.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="95%"> </p>
 
 
 ## Citiation
 **If you find this work helpful, please consider citing:**
 ```
-@Article{DistgLF,
-    author    = {Wang, Yingqian and Wang, Longguang and Wu, Gaochang and Yang, Jungang and An, Wei and Yu, Jingyi and Guo, Yulan},
-    title     = {Disentangling Light Fields for Super-Resolution and Disparity Estimation},
-    journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 
-    year      = {2022},   
+@inproceedings{OACC-Net,
+  title     = {Occlusion-Aware Cost Constructor for Light Field Depth Estimation},
+  author    = {Wang, Yingqian and Wang, Longguang and Liang, Zhengyu and Yang, Jungang and An, Wei and Guo, Yulan},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2022}
 }
 ```
 <br>
