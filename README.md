@@ -62,7 +62,7 @@
 ## Results:
 
 ### Quantitative Results:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Quantitative.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/QuantitativeMSE.png" width="95%"> </p>
 
 ### Visual Comparisons:
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Visual.png" width="95%"> </p>
@@ -70,9 +70,10 @@
 ### Screenshot on the HCI 4D LF Benchmark (March 2022):
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/screenshot.png" width="95%"> </p>
 
-### Performance on real LFs and extended applications:
+### Performance on real LFs:
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="95%"> </p>
 
+Please refer to our [supplemental material]() for additional quantitative and visual comparisons.
 
 ## Citiation
 **If you find this work helpful, please consider citing:**
@@ -87,4 +88,4 @@
 <br>
 
 ## Contact
-**Welcome to raise issues or email to [yingqian.wang@outlook.com](yingqian.wang@outlook.com) for any question regarding this work.**
+**Welcome to raise issues or email to [wangyingqian16@nudt.edu.cn](wangyingqian16@nudt.edu.cn) for any question regarding this work.**
