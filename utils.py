@@ -1,7 +1,6 @@
-#from PIL import Image
-import os
 import torch
 import torch.nn.functional as F
+import os
 from torch.utils.data.dataset import Dataset
 from torchvision.transforms import ToTensor
 import random
@@ -21,9 +20,9 @@ class TrainSetLoader(Dataset):
         """ We use totally 16 LF images (0 to 15) for training. Since some images (4,6,15) have a reflection region,
                 we decrease the occurrence frequency of them. """
         scene_idx = []
-        for i in range(3):
+        for i in range(75):
             scene_idx = np.append(scene_idx, [0, 1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14])
-        for i in range(1):
+        for i in range(25):
             scene_idx = np.append(scene_idx, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 
         self.scene_idx = scene_idx.astype('int')

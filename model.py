@@ -2,12 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
-import numpy as np
-import time
 
 
 class Net(nn.Module):
-    def __init__(self, angRes, H, W):
+    def __init__(self, angRes):
         super(Net, self).__init__()
         self.num_cascade = 2
         mindisp = -4
@@ -28,13 +26,9 @@ class Net(nn.Module):
         )
         self.lastconv = nn.Conv3d(8, 8, kernel_size=(1, 3, 3), stride=1, padding=(0, 1, 1), bias=False)
         self.build_cost = BuildCost(8, 512, angRes, mindisp, maxdisp)
-        self.aggregate = Aggregate(512, 160, mindisp, maxdisp, H, W)
-        self.register_buffer('mask', torch.ones(1, angRes ** 2, H, W))
-        self.register_buffer('x_base', torch.linspace(0, 1, W).repeat(1, H, 1))
-        self.register_buffer('y_base', torch.linspace(0, 1, H).repeat(1, W, 1).transpose(1, 2))
+        self.aggregate = Aggregate(512, 160, mindisp, maxdisp)
 
     def forward(self, x, dispGT=None):
-        start = time.clock()
         lf = rearrange(x, 'b c (a1 h) (a2 w) -> b c a1 a2 h w', a1=self.angRes, a2=self.angRes)
         x = rearrange(x, 'b c (a1 h) (a2 w) -> b c (a1 a2) h w', a1=self.angRes, a2=self.angRes)
         b, c, _, h, w = x.shape
@@ -45,16 +39,14 @@ class Net(nn.Module):
             cost = self.build_cost(feat, mask)
             disp = self.aggregate(cost)
         else:
-            mask = self.mask
+            mask = torch.ones(1, self.angRes ** 2, h, w).to(x.device)
             cost = self.build_cost(feat, mask)
             disp = self.aggregate(cost)
-            mask = Generate_mask(lf, disp, self.x_base, self.y_base)
+            mask = Generate_mask(lf, disp)
             cost = self.build_cost(feat, mask)
             disp = self.aggregate(cost)
 
-        time_cost = time.clock() - start
-
-        return disp, time_cost
+        return disp
 
 
 class BuildCost(nn.Module):
@@ -93,7 +85,7 @@ class BuildCost(nn.Module):
 
 
 class Aggregate(nn.Module):
-    def __init__(self, inC, channel, mindisp, maxdisp, height, width):
+    def __init__(self, inC, channel, mindisp, maxdisp):
         super(Aggregate, self).__init__()
         self.sq = nn.Sequential(
             nn.Conv3d(inC, channel, 1, 1, 0, bias=False), nn.BatchNorm3d(channel), nn.LeakyReLU(0.1, inplace=True))
@@ -109,10 +101,6 @@ class Aggregate(nn.Module):
         self.softmax = nn.Softmax(1)
         self.mindisp = mindisp
         self.maxdisp = maxdisp
-        candidate = torch.zeros(1, maxdisp - mindisp + 1, height, width).cuda()
-        for d in range(maxdisp - mindisp + 1):
-            candidate[:, d, :, :] = mindisp + d
-        self.candidate = candidate
 
     def forward(self, psv):
         buffer = self.sq(psv)
@@ -123,7 +111,9 @@ class Aggregate(nn.Module):
         buffer = self.Conv3(buffer)
         score = self.Conv4(buffer)
         attmap = self.softmax(score.squeeze(1))
-        temp = attmap * self.candidate
+        temp = torch.zeros(attmap.shape).to(attmap.device)
+        for d in range(self.maxdisp - self.mindisp + 1):
+            temp[:, d, :, :] = attmap[:, d, :, :] * (self.mindisp + d)
         disp = torch.sum(temp, dim=1, keepdim=True)
         return disp
 
@@ -176,8 +166,10 @@ class CALayer(nn.Module):
         return x * y
 
 
-def Generate_mask(lf, disp, x_base, y_base):
+def Generate_mask(lf, disp):
     b, c, angRes, _, h, w = lf.shape
+    x_base = torch.linspace(0, 1, w).repeat(1, h, 1).to(lf.device)
+    y_base = torch.linspace(0, 1, h).repeat(1, w, 1).transpose(1, 2).to(lf.device)
     center = (angRes - 1) // 2
     img_ref = lf[:, :, center, center, :, :]
     img_res = []
@@ -228,16 +220,9 @@ class ModulateConv2d(nn.Module):
 
 if __name__ == "__main__":
     angRes = 9
-    height = 512
-    width = 512
-    net = Net(angRes, height, width).cuda()
-    input = torch.randn(1, 1, height * angRes, width * angRes).cuda()
-    time_cost_list = []
-    for i in range(70):
-        with torch.no_grad():
-            out, time_cost = net(input)
-        print('time_cost = %f' % (time_cost))
-        if i >= 20:
-            time_cost_list.append(time_cost)
-    time_cost_avg = np.mean(time_cost_list)
-    print('average time cost = %f' % (time_cost_avg))
+    net = Net(angRes).cuda()
+    from thop import profile
+    input = torch.randn(1, 1, 32 * angRes, 32 * angRes).cuda()
+    flops, params = profile(net, inputs=(input,))
+    print('   Number of parameters: %.2fM' % (params / 1e6))
+    print('   Number of FLOPs: %.2fG' % (flops / 1e9))

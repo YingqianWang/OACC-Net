@@ -1,39 +1,35 @@
-from utils import *
-from einops import rearrange
 import argparse
-from torchvision.transforms import ToTensor
+from utils import *
 from model import Net
 
 
-# Settings
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=str, default='cuda:0')
     parser.add_argument("--angRes", type=int, default=9, help="angular resolution")
-    parser.add_argument('--model_name', type=str, default='DistgDisp')
+    parser.add_argument('--model_name', type=str, default='OACC-Net')
     parser.add_argument('--testset_dir', type=str, default='./demo_input/')
     parser.add_argument('--crop', type=bool, default=True)
-    parser.add_argument('--patchsize', type=int, default=64)
-    parser.add_argument('--minibatch_test', type=int, default=32)
-    parser.add_argument('--model_path', type=str, default='./log/DistgDisp.pth.tar')
+    parser.add_argument('--patchsize', type=int, default=128)
+    parser.add_argument('--minibatch_test', type=int, default=4)
+    parser.add_argument('--model_path', type=str, default='./log/OACC-Net.pth.tar')
     parser.add_argument('--save_path', type=str, default='./Results/')
     return parser.parse_args()
 
 '''
 Note: 1) We crop LFs into overlapping patches to save the CUDA memory during inference. 
-      2) Since we have not optimize our cropping scheme, when cropping is performed, 
-         the inference time will be longer than the one reported in our paper.
+      2) When cropping is performed, the inference time will be longer than the one reported in our paper.
 '''
 
 def test(cfg):
+
+    scene_list = os.listdir(cfg.testset_dir)
+    angRes = cfg.angRes
+
     net = Net(cfg.angRes)
     net.to(cfg.device)
     model = torch.load(cfg.model_path, map_location={'cuda:0': cfg.device})
     net.load_state_dict(model['state_dict'])
-
-    scene_list = os.listdir(cfg.testset_dir)
-
-    angRes = cfg.angRes
 
     for scenes in scene_list:
         print('Working on scene: ' + scenes + '...')
@@ -49,9 +45,8 @@ def test(cfg):
         if cfg.crop == False:
             data = rearrange(lf_angCrop, 'u v h w -> (u h) (v w)')
             data = ToTensor()(data.copy())
-            data = data.unsqueeze(0)
             with torch.no_grad():
-                disp = net(data.to(cfg.device))
+                disp = net(data.unsqueeze(0).to(cfg.device))
             disp = np.float32(disp[0,0,:,:].data.cpu())
 
         else:
@@ -85,8 +80,6 @@ def test(cfg):
         write_pfm(disp, cfg.save_path + '%s.pfm' % (scenes))
 
     return
-
-
 
 
 if __name__ == '__main__':
