@@ -2,7 +2,10 @@
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
-***PyTorch implementation of our CVPR 2022 paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf]()]***<br>
+***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf]()]***<br>
+
+## News and Updates:
+* 2022-02-28: Codes and models are uploaded.
 
 ## Preparation:
 ### Requirement:
