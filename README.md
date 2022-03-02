@@ -71,10 +71,10 @@
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Visual.png" width="95%"> </p>
 
 ### Screenshot on the HCI 4D LF Benchmark (March 2022):
-<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Screenshot.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/Screenshot.png" width="75%"> </p>
 
 ### Performance on real LFs:
-<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="95%"> </p>
+<p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="65%"> </p>
 
 Please refer to our [supplemental material]() for additional quantitative and visual comparisons.
 
