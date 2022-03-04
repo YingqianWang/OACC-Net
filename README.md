@@ -2,7 +2,7 @@
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
-***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf]()]***<br>
+***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf](https://arxiv.org/pdf/2203.01576.pdf)]***<br>
 
 ## News and Updates:
 * 2022-02-28: Codes and models are uploaded.
@@ -76,7 +76,7 @@
 ### Performance on real LFs:
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="65%"> </p>
 
-Please refer to our [supplemental material]() for additional quantitative and visual comparisons.
+Please refer to our [supplemental material](https://yingqianwang.github.io/files/OACC-Net_supp.pdf) for additional quantitative and visual comparisons.
 
 ## Citiation
 **If you find this work helpful, please consider citing:**
