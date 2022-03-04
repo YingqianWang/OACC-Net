@@ -5,6 +5,8 @@
 ***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf](https://arxiv.org/pdf/2203.01576.pdf)]***<br>
 
 ## News and Updates:
+* 2022-03-04: The camera ready version of our paper is available on arXiv.
+* 2022-03-02: Our paper is accepted to CVPR 2022.
 * 2022-02-28: Codes and models are uploaded.
 
 ## Preparation:
