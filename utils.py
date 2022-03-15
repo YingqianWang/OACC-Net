@@ -13,6 +13,7 @@ class TrainSetLoader(Dataset):
     def __init__(self, cfg):
         super(TrainSetLoader, self).__init__()
         files = os.listdir(cfg.trainset_dir)
+        files = sorted(files)
         self.trainset_dir = cfg.trainset_dir
         self.files = files
         self.angRes = cfg.angRes
