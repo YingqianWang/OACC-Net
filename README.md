@@ -2,7 +2,7 @@
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
-***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf](https://arxiv.org/pdf/2203.01576.pdf)]***<br>
+***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf](https://openaccess.thecvf.com/content/CVPR2022/papers/Wang_Occlusion-Aware_Cost_Constructor_for_Light_Field_Depth_Estimation_CVPR_2022_paper.pdf)]***<br>
 
 ## News and Updates:
 * 2022-03-04: The camera ready version of our paper is available on arXiv.
@@ -78,16 +78,18 @@
 ### Performance on real LFs:
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="65%"> </p>
 
-Please refer to our [supplemental material](https://yingqianwang.github.io/files/OACC-Net_supp.pdf) for additional quantitative and visual comparisons.
+Please refer to our [supplemental material]([https://yingqianwang.github.io/files/OACC-Net_supp.pdf](https://openaccess.thecvf.com/content/CVPR2022/supplemental/Wang_Occlusion-Aware_Cost_Constructor_CVPR_2022_supplemental.pdf)) for additional quantitative and visual comparisons.
 
 ## Citiation
 **If you find this work helpful, please consider citing:**
 ```
-@inproceedings{OACC-Net,
-  title     = {Occlusion-Aware Cost Constructor for Light Field Depth Estimation},
-  author    = {Wang, Yingqian and Wang, Longguang and Liang, Zhengyu and Yang, Jungang and An, Wei and Guo, Yulan},
-  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year={2022}
+@InProceedings{OACC-Net,
+    author    = {Wang, Yingqian and Wang, Longguang and Liang, Zhengyu and Yang, Jungang and An, Wei and Guo, Yulan},
+    title     = {Occlusion-Aware Cost Constructor for Light Field Depth Estimation},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2022},
+    pages     = {19809-19818}
 }
 ```
 <br>
