@@ -1,4 +1,4 @@
-## OACC-Net: Occlusion-Aware Cost Constructor Network
+## OACC-Net
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
