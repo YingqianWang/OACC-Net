@@ -2,16 +2,15 @@
 <br>
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/OACC-Net.png" width="90%"> </p>
 
-***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[pdf](https://openaccess.thecvf.com/content/CVPR2022/papers/Wang_Occlusion-Aware_Cost_Constructor_for_Light_Field_Depth_Estimation_CVPR_2022_paper.pdf)]***<br>
+***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[CVPR 2022](https://openaccess.thecvf.com/content/CVPR2022/papers/Wang_Occlusion-Aware_Cost_Constructor_for_Light_Field_Depth_Estimation_CVPR_2022_paper.pdf)]***<br>
 
 ## News and Updates:
-* 2022-03-04: The camera ready version of our paper is available on arXiv.
 * 2022-03-02: Our paper is accepted to CVPR 2022.
 * 2022-02-28: Codes and models are uploaded.
 
 ## Preparation:
 ### Requirement:
-* PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.6, cuda=9.0.
+* PyTorch 1.3.0, torchvision 0.4.1. The code is tested with python=3.7, cuda=9.0.
 * A single GPU with cuda memory larger than 12 GB is required to reproduce the inference time reported in our paper.
 
 ### Datasets:
@@ -78,7 +77,7 @@
 ### Performance on real LFs:
 <p align="center"> <img src="https://raw.github.com/YingqianWang/OACC-Net/master/Figs/VisualReal.png" width="65%"> </p>
 
-Please refer to our [supplemental material]([https://yingqianwang.github.io/files/OACC-Net_supp.pdf](https://openaccess.thecvf.com/content/CVPR2022/supplemental/Wang_Occlusion-Aware_Cost_Constructor_CVPR_2022_supplemental.pdf)) for additional quantitative and visual comparisons.
+Please refer to our [supplemental material](https://openaccess.thecvf.com/content/CVPR2022/supplemental/Wang_Occlusion-Aware_Cost_Constructor_CVPR_2022_supplemental.pdf) for additional quantitative and visual comparisons.
 
 ## Citiation
 **If you find this work helpful, please consider citing:**
