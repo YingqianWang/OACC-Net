@@ -5,6 +5,7 @@
 ***PyTorch implementation of our paper "Occlusion-Aware Cost Constructor for Light Field Depth Estimation". [[CVPR 2022](https://openaccess.thecvf.com/content/CVPR2022/papers/Wang_Occlusion-Aware_Cost_Constructor_for_Light_Field_Depth_Estimation_CVPR_2022_paper.pdf)]***<br>
 
 ## News and Updates:
+* 2022-07-02: Correct a mistake in `train.py`, i.e., dispGT should be fed to the network during training.
 * 2022-03-02: Our paper is accepted to CVPR 2022.
 * 2022-02-28: Codes and models are uploaded.
 
