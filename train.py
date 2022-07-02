@@ -60,7 +60,7 @@ def train(cfg):
         loss_epoch = []
         for idx_iter, (data, dispGT) in tqdm(enumerate(train_loader), total=len(train_loader)):
             data, dispGT = data.to(cfg.device), dispGT.to(cfg.device)
-            disp = net(data)
+            disp = net(data, dispGT)
             loss = criterion_Loss(disp, dispGT[:, 0, :, :].unsqueeze(1))
             optimizer.zero_grad()
             loss.backward()
